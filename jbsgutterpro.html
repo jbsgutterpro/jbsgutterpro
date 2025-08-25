@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JBS Gutter Pro - Book Your Weekend Service</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #d9f0ff; /* calm light blue */
+      color: #333;
+      box-sizing: border-box;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    header h1 {
+      margin: 0;
+      color: #2a7a2a;
+      font-size: 2.2em;
+    }
+    header p {
+      font-weight: bold;
+      color: #105a10;
+      font-size: 1.1em;
+      margin-top: 6px;
+      margin-bottom: 20px;
+    }
+    form {
+      background: white;
+      padding: 25px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px #b0d1ff;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      font-size: 0.95em;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 9px 10px;
+      margin-bottom: 18px;
+      border-radius: 5px;
+      border: 1.8px solid #99c2ff;
+      font-size: 1em;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    button {
+      background-color: #2a7a2a;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      font-size: 1.1em;
+      transition: background-color 0.25s ease;
+    }
+    button:hover {
+      background-color: #246824;
+    }
+    .confirmation {
+      background: #d4edda;
+      border: 1.5px solid #c3e6cb;
+      padding: 18px;
+      border-radius: 8px;
+      color: #155724;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 25px;
+      font-size: 1.1em;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JBS Gutter Pro</h1>
+    <p>Gutter Cleaning — <span style="color:#104910;">Weekends Only</span></p>
+  </header>
+
+  <form id="bookingForm" action="https://formsubmit.co/burkeslawncare00@gmail.com" method="POST">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" name="phone" required pattern="[0-9\s\-\+\(\)]+" />
+
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="address">Service Address</label>
+    <textarea id="address" name="address" rows="2" required></textarea>
+
+    <label for="description">Description of the House (optional)</label>
+    <textarea id="description" name="description" rows="3" placeholder="E.g., two-story, brick, fenced yard..."></textarea>
+
+    <label for="date">Preferred Service Date (Weekends only)</label>
+    <input type="date" id="date" name="date" required />
+
+    <!-- Formsubmit needs this hidden input to prevent spam -->
+    <input type="hidden" name="_captcha" value="false" />
+    <!-- Redirect to same page after submit -->
+    <input type="hidden" name="_next" value="" />
+    
+    <button type="submit">Book Now</button>
+  </form>
+
+  <div id="confirmation" class="confirmation">
+    Thanks for booking! We will contact you soon to confirm your appointment.
+  </div>
+
+  <script>
+    // Disable all non-weekend dates in date picker
+    const dateInput = document.getElementById('date');
+    const form = document.getElementById('bookingForm');
+    const confirmation = document.getElementById('confirmation');
+
+    function isWeekend(date) {
+      const day = date.getDay();
+      return day === 0 || day === 6; // Sunday=0, Saturday=6
+    }
+
+    // Set min date to today
+    const today = new Date();
+    dateInput.min = today.toISOString().split('T')[0];
+
+    // Validate date input on change
+    dateInput.addEventListener('input', () => {
+      const selectedDate = new Date(dateInput.value);
+      if (!isWeekend(selectedDate)) {
+        alert('Please select a Saturday or Sunday.');
+        dateInput.value = '';
+      }
+    });
+
+    form.addEventListener('submit', (e) => {
+      const selectedDate = new Date(dateInput.value);
+      if (!isWeekend(selectedDate)) {
+        e.preventDefault();
+        alert('Please select a valid weekend date (Saturday or Sunday).');
+        return;
+      }
+      // Show confirmation after form is submitted, hide form
+      // Since formsubmit redirects, we'll rely on their confirmation page.
+      // But if you want, we can handle it here by AJAX or by redirect page.
+    });
+  </script>
+</body>
+</html>
